@@ -6,6 +6,7 @@ const mongoose   = require("./db/connection");
 const app        = express();
 
 const Question = mongoose.Question;
+const Answer = mongoose.Answer;
 
 app.set("port", process.env.PORT || 8790);
 
@@ -38,13 +39,31 @@ app.post("/api/questions", function(req, res){
   });
 });
 
+app.post("/api/questions/answers", function(req, res){
+  Question.create(req.body).then(function(question){
+    res.json(question)
+  });
+});
+
 app.delete("/api/questions/:id", function(req, res){
   Question.findOneAndRemove({_id: req.params.id}).then(function(){
     res.json({ msg: "success" })
   });
 });
 
+app.delete("/api/questions/:id/answers/:answer_id", function(req, res){
+  Question.findOneAndRemove({_id: req.params.id}).then(function(){
+    res.json({ msg: "success" })
+  });
+});
+
 app.put("/api/questions/:id", function(req, res){
+  Question.findOneAndUpdate({_id: req.params.id}, req.body, {new: true}).then(function(question){
+    res.json(question)
+  });
+});
+
+app.put("/api/questions/:id/answers/answer_id", function(req, res){
   Question.findOneAndUpdate({_id: req.params.id}, req.body, {new: true}).then(function(question){
     res.json(question)
   });
