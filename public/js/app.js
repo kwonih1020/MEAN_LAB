@@ -59,6 +59,12 @@ angular
               controller: "QuestionsShowCtrl",
               controllerAs: "vm"
             })
+            .state("edit", {
+              url: "/questions/:id/edit",
+              templateUrl: "/assets/js/ng-views/edit.html",
+              controller: "QuestionsShowCtrl",
+              controllerAs: "vm"
+            })
 
           $urlRouterProvider.otherwise("/")
         }
@@ -74,6 +80,13 @@ angular
 
     function QuestionsShowCtrlFunction($state, $stateParams, QuestionFactory) {
       this.question = QuestionFactory.get({id: $stateParams.id})
+      this.update = function(){
+        this.question.$update({id: $stateParams.id}, function(data){
+          let id = data._id
+          console.log(data)
+          $state.go('show', { id: id})
+        })
+      }
     }
 
     function QuestionsCreateCtrlFunction($state, $stateParams, QuestionFactory){

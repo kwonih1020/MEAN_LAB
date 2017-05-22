@@ -2,5 +2,6 @@
 <div class="questions">
   <h3 data-ng-repeat="question in vm.questions">
     <a data-ui-sref="show({id: question._id})">{{question.title}}</a>
+    <a data-ui-sref="edit({id: question._id})">Edit</a>
   </h3>
 </div>

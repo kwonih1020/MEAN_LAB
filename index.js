@@ -39,13 +39,13 @@ app.post("/api/questions", function(req, res){
 });
 
 app.delete("/api/questions/:id", function(req, res){
-  Question.findOneAndRemove({id: req.params.id}).then(function(){
+  Question.findOneAndRemove({_id: req.params.id}).then(function(){
     res.json({ msg: "success" })
   });
 });
 
 app.put("/api/questions/:id", function(req, res){
-  Question.findOneAndUpdate({id: req.params.id}, req.body, {new: true}).then(function(question){
+  Question.findOneAndUpdate({_id: req.params.id}, req.body, {new: true}).then(function(question){
     res.json(question)
   });
 });
