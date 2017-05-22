@@ -87,6 +87,12 @@ angular
           $state.go('show', { id: id})
         })
       }
+
+      this.destroy = function() {
+        this.question.$delete({id: $stateParams.id}).then(function(){
+          $state.go("index")
+        })
+      }
     }
 
     function QuestionsCreateCtrlFunction($state, $stateParams, QuestionFactory){
