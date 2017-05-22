@@ -29,10 +29,14 @@ angular
 
 
     function router ($stateProvider, $locationProvider, $urlRouterProvider) {
-          $locationProvider.html5Mode(true);
+          // $locationProvider.html5Mode(true);
           $stateProvider
-            .state("index", {
+            .state("welcome", {
               url: "/",
+              templateUrl: "/assets/js/ng-views/welcome.html"
+            })
+            .state("index", {
+              url: "/questions",
               templateUrl: "/assets/js/ng-views/index.html",
               controller: "QuestionsIndexCtrl",
               controllerAs: "vm"
