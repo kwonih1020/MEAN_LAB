@@ -2,4 +2,7 @@
   <h2>Q: {{vm.question.title}}</h2>
   <p>Author: {{vm.question.author}}</p>
   <p>{{vm.question.content}}</p>
+  <div data-ng-repeat="answer in vm.question.answers">
+    <p>"{{answer.content}}"</p>
+  </div>
 </div>
