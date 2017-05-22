@@ -1,11 +1,11 @@
 const express    = require("express");
-const bodyParser = require("body-parser");
+const parser = require("body-parser");
 const hbs        = require("express-handlebars");
 const mongoose   = require("./db/connection");
 
 const app        = express();
 
-const Question = mongoose.model("Question");
+const Question = mongoose.Question;
 
 app.set("port", process.env.PORT || 8790);
 
@@ -27,7 +27,7 @@ app.get("/", function(req, res) {
 app.get("/api/questions", function(req, res){
   Question.find({}).then (function(questions){
     res.json(questions);
-  )};
+  });
 });
 
 app.get("/api/questions/:id", function(req, res){
