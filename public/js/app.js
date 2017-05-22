@@ -29,7 +29,7 @@ angular
 
 
     function router ($stateProvider, $locationProvider, $urlRouterProvider) {
-          $locationProvider.html5Mode(true);
+          // $locationProvider.html5Mode(true);
           $stateProvider
             .state("index", {
               url: "/",
