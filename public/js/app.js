@@ -57,6 +57,6 @@ angular
     }
 
     function QuestionsShowCtrlFunction($state, $stateParams, QuestionFactory) {
-      this.question = QuestionFactory.get({_id: $stateParams.id})
-      console.log(this.question);
+      this.question = QuestionFactory.get({id: $stateParams.id})
+      console.log("question:", this.question);
     }
