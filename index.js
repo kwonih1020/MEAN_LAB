@@ -20,10 +20,6 @@ app.engine(".hbs", hbs({
 app.use("/assets", express.static("public"));
 app.use(parser.json());
 
-app.get("/", function(req, res) {
-  res.render("questions");
-});
-
 app.get("/api/questions", function(req, res){
   Question.find({}).then (function(questions){
     res.json(questions);
@@ -52,6 +48,10 @@ app.put("/api/questions/:id", function(req, res){
   Question.findOneAndUpdate({id: req.params.id}, req.body, {new: true}).then(function(question){
     res.json(question)
   });
+});
+
+app.get("/*", function(req, res) {
+  res.render("questions");
 });
 
 

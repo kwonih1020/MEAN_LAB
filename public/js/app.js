@@ -26,10 +26,16 @@ angular
       "QuestionFactory",
       QuestionsShowCtrlFunction
     ])
+    .controller("QuestionsCreateCtrl", [
+      "$state",
+      "$stateParams",
+      "QuestionFactory",
+      QuestionsCreateCtrlFunction
+    ])
 
 
     function router ($stateProvider, $locationProvider, $urlRouterProvider) {
-          // $locationProvider.html5Mode(true);
+          $locationProvider.html5Mode(true);
           $stateProvider
             .state("welcome", {
               url: "/",
@@ -41,12 +47,19 @@ angular
               controller: "QuestionsIndexCtrl",
               controllerAs: "vm"
             })
+            .state("create", {
+              url: "/questions/new",
+              templateUrl: "/assets/js/ng-views/new.html",
+              controller: "QuestionsCreateCtrl",
+              controllerAs: "vm"
+            })
             .state("show", {
               url: "/questions/:id",
               templateUrl: "/assets/js/ng-views/show.html",
               controller: "QuestionsShowCtrl",
               controllerAs: "vm"
             })
+
           $urlRouterProvider.otherwise("/")
         }
     function questionFactoryFunction($resource){
@@ -57,10 +70,18 @@ angular
 
     function QuestionsIndexCtrlFunction($state, QuestionFactory) {
       this.questions = QuestionFactory.query()
-        console.log(this.questions)
     }
 
     function QuestionsShowCtrlFunction($state, $stateParams, QuestionFactory) {
       this.question = QuestionFactory.get({id: $stateParams.id})
-      console.log("question:", this.question);
+    }
+
+    function QuestionsCreateCtrlFunction($state, $stateParams, QuestionFactory){
+      this.question = new QuestionFactory()
+      this.create = function(){
+        this.question.$save(this.question, function(data){
+          let id = data._id
+          $state.go('show', { id: id})
+        })
+      }
     }
