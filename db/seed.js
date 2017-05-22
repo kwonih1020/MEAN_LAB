@@ -11,7 +11,7 @@ let answer1 = new Answer ({
 
 
 Answer.remove({}).then(function(){
-  Answer.collection.insert(newAnswers).then(function(){
+  Answer.collection.insert(answer1).then(function(){
   });
 });
 

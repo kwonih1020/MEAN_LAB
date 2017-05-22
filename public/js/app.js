@@ -86,7 +86,10 @@ angular
           console.log(data)
           $state.go('show', { id: id})
         })
+      this.addAnswer = function(){
+
       }
+    }
 
       this.destroy = function() {
         this.question.$delete({id: $stateParams.id}).then(function(){
