@@ -61,8 +61,8 @@ app.delete("/api/questions/:id", function(req, res){
 });
 
 app.delete("/api/questions/:id/answers/:answer_id", function(req, res){
-  Answer.findOneAndRemove({_id: req.params.id}).then(function(){
-    res.json({ msg: "success" })
+  Answer.findOneAndRemove({_id: req.params._id}).then(function(){
+    res.json(answer)
   });
 });
 
@@ -72,11 +72,19 @@ app.put("/api/questions/:id", function(req, res){
   });
 });
 
+<<<<<<< HEAD
 app.put("/api/questions/:id/answers/:answer_id", function(req, res){
   Answer.findOneAndUpdate({_id: req.answer_id}, req.body, {new: true}).then(function(answer){
     res.json(answer)
   });
 });
+=======
+// app.put("/api/questions/:id/answers/:answer_id", function(req, res){
+//   Answer.findOneAndUpdate({_id: req.params.answer_id}, req.body, {new: true}).then(function(answer){
+//     res.json(answer)
+//   });
+// });
+>>>>>>> ccbe82ead500c2b4e5b9e870097d93bd370b9eda
 
 app.get("/*", function(req, res) {
   res.render("questions");
