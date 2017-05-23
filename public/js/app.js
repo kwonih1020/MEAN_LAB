@@ -15,6 +15,10 @@ angular
       "$resource",
       questionFactoryFunction
     ])
+    .factory("AnswerFactory", [
+      "$resource",
+      answerFactoryFunction
+    ])
     .controller("QuestionsIndexCtrl", [
       "$state",
       "QuestionFactory",
@@ -24,6 +28,7 @@ angular
       "$state",
       "$stateParams",
       "QuestionFactory",
+      "AnswerFactory",
       QuestionsShowCtrlFunction
     ])
     .controller("QuestionsCreateCtrl", [
@@ -32,7 +37,6 @@ angular
       "QuestionFactory",
       QuestionsCreateCtrlFunction
     ])
-
 
     function router ($stateProvider, $locationProvider, $urlRouterProvider) {
           $locationProvider.html5Mode(true);
@@ -65,11 +69,17 @@ angular
               controller: "QuestionsShowCtrl",
               controllerAs: "vm"
             })
-
           $urlRouterProvider.otherwise("/")
         }
+
     function questionFactoryFunction($resource){
       return $resource('/api/questions/:id', {}, {
+        update: { method: "PUT" }
+      })
+    }
+
+    function answerFactoryFunction($resource){
+      return $resource('/api/questions/:id/answers/:answer_id', {}, {
         update: { method: "PUT" }
       })
     }
@@ -78,19 +88,23 @@ angular
       this.questions = QuestionFactory.query()
     }
 
-    function QuestionsShowCtrlFunction($state, $stateParams, QuestionFactory) {
+    function QuestionsShowCtrlFunction($state, $stateParams, QuestionFactory, AnswerFactory) {
       this.question = QuestionFactory.get({id: $stateParams.id})
+      this.answer = new AnswerFactory()
       this.update = function(){
         this.question.$update({id: $stateParams.id}, function(data){
           let id = data._id
           console.log(data)
           $state.go('show', { id: id})
         })
-      this.addAnswer = function(){
-
       }
-    }
-
+      this.addAnswer = function(){
+        this.answer.$save({id: $stateParams.id}, function(data){
+          let id = data._id
+          console.log(data)
+          $state.reload()
+        })
+      }
       this.destroy = function() {
         this.question.$delete({id: $stateParams.id}).then(function(){
           $state.go("index")

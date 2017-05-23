@@ -7,7 +7,7 @@
   </div>
 </div>
 
-<form ng-submit="vm.addAnswer()">
-  <input type="number" ng-model="vm.newCandidate.year" placeholder="Year" />
-  <button type="submit">Add answer</button>
+<form>
+  <input type="text" ng-model="vm.answer.content" placeholder="Answer" />
+  <button type="submit" ng-click="vm.addAnswer()">Add Answer</button>
 </form>
