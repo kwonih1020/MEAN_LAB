@@ -5,6 +5,7 @@ const mongoose   = require("./db/connection");
 
 const app        = express();
 
+
 const Question = mongoose.Question;
 const Answer = mongoose.Answer;
 
@@ -35,9 +36,11 @@ app.get("/api/questions/:id", function(req, res){
 
 app.post("/api/questions", function(req, res){
   Question.create(req.body).then(function(question){
+    console.log(req.body)
     res.json(question)
   });
 });
+
 
 app.post("/api/questions/:id/answers", function(req, res){
   let question = Question.findOne({_id: req.params.id}).then(function(question){
@@ -61,9 +64,20 @@ app.delete("/api/questions/:id", function(req, res){
 });
 
 app.delete("/api/questions/:id/answers/:answer_id", function(req, res){
-  Answer.findOneAndRemove({_id: req.params._id}).then(function(){
-    res.json(answer)
-  });
+  Question.findOne({_id: req.params.id}).then(function(question){
+    for (let i = 0; i < question.answers.length; i++){
+      if (question.answers[i]._id == req.params.answer_id) {
+        question.answers.splice(i, 1)
+      }
+    }
+    question.save((err, question) =>{
+      if (err){
+        console.log(err)
+      } else {
+        res.json(question)
+      }
+    })
+  })
 });
 
 app.put("/api/questions/:id", function(req, res){
@@ -72,19 +86,36 @@ app.put("/api/questions/:id", function(req, res){
   });
 });
 
-<<<<<<< HEAD
-app.put("/api/questions/:id/answers/:answer_id", function(req, res){
-  Answer.findOneAndUpdate({_id: req.answer_id}, req.body, {new: true}).then(function(answer){
-    res.json(answer)
-  });
+
+app.get("/api/questions/:id/answers/:answer_id", function(req, res){
+
+  Question.findOne({_id: req.params.id}).then(function(question){
+  let answer = question.answers.find(function(answer){
+    return answer._id == req.params.answer_id;
+  })
+  res.json(answer)
+  })
 });
-=======
-// app.put("/api/questions/:id/answers/:answer_id", function(req, res){
-//   Answer.findOneAndUpdate({_id: req.params.answer_id}, req.body, {new: true}).then(function(answer){
-//     res.json(answer)
-//   });
-// });
->>>>>>> ccbe82ead500c2b4e5b9e870097d93bd370b9eda
+
+app.put("/api/questions/:id/answers/:answer_id", function(req, res){
+
+  Question.findOne({_id: req.params.id}).then(function(question){
+  let answer = question.answers.find(function(answer){
+    return answer._id == req.params.answer_id;
+  })
+    answer.content = req.body.content
+    question.save((err, answer) =>{
+      if (err){
+        console.log(err)
+      } else {
+        console.log("answer", answer)
+        res.json(answer)
+      }
+    })
+  })
+});
+
+
 
 app.get("/*", function(req, res) {
   res.render("questions");

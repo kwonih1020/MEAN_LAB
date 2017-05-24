@@ -37,6 +37,13 @@ angular
       "QuestionFactory",
       QuestionsCreateCtrlFunction
     ])
+    .controller("AnswerNewEditCtrl", [
+      "$state",
+      "$stateParams",
+      "QuestionFactory",
+      "AnswerFactory",
+      AnswerNewEditCtrlFunction
+    ])
 
     function router ($stateProvider, $locationProvider, $urlRouterProvider) {
           $locationProvider.html5Mode(true);
@@ -69,6 +76,12 @@ angular
               controller: "QuestionsShowCtrl",
               controllerAs: "vm"
             })
+            .state("editAnswer", {
+              url: "/questions/:id/answers/:answer_id",
+              templateUrl: "/assets/js/ng-views/editAnswer.html",
+              controller: "AnswerNewEditCtrl",
+              controllerAs: "vm"
+            })
           $urlRouterProvider.otherwise("/")
         }
 
@@ -90,7 +103,6 @@ angular
 
     function QuestionsShowCtrlFunction($state, $stateParams, QuestionFactory, AnswerFactory) {
       this.question = QuestionFactory.get({id: $stateParams.id})
-      this.answer = new AnswerFactory()
       this.update = function(){
         this.question.$update({id: $stateParams.id}, function(data){
           let id = data._id
@@ -98,19 +110,23 @@ angular
           $state.go('show', { id: id})
         })
       }
-      this.addAnswer = function(){
-        this.answer.$save({id: $stateParams.id}, function(data){
-          let id = data._id
-          console.log(data)
-          $state.reload()
-        })
-      }
       this.destroy = function() {
         this.question.$delete({id: $stateParams.id}).then(function(){
           $state.go("index")
         })
       }
+
+
+      this.answer = new AnswerFactory()
+      this.addAnswer = function(){
+        this.answer.$save({id: $stateParams.id}, function(data){
+          let id = data._id
+          $state.reload()
+        })
+      }
+
     }
+
 
     function QuestionsCreateCtrlFunction($state, $stateParams, QuestionFactory){
       this.question = new QuestionFactory()
@@ -120,4 +136,27 @@ angular
           $state.go('show', { id: id})
         })
       }
+    }
+
+
+
+    function AnswerNewEditCtrlFunction($state, $stateParams, QuestionFactory, AnswerFactory) {
+      this.question = QuestionFactory.get({id: $stateParams.id})
+
+      this.answer = AnswerFactory.get({id: $stateParams.id, answer_id: $stateParams.answer_id})
+      console.log(this.answer)
+
+      this.editAnswer = function(){
+        this.answer.$update({id: $stateParams.id, answer_id: $stateParams.answer_id}, function(){
+          $state.go('show', { id: $stateParams.id})
+        })
+      }
+
+      this.deleteAnswer = function(){
+        this.answer.$delete({id: $stateParams.id, answer_id: $stateParams.answer_id}).then(function(){
+          $state.go('show', { id: $stateParams.id})
+        })
+      }
+
+
     }

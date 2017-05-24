@@ -4,6 +4,8 @@
   <p>{{vm.question.content}}</p>
   <div data-ng-repeat="answer in vm.question.answers">
     <p>"{{answer.content}}"</p>
+    <a data-ui-sref="editAnswer({id: vm.question._id, answer_id: answer._id})">Edit</a>
+
   </div>
 </div>
 
